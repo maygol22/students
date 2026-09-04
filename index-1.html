@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فرم ثبت اطلاعات</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: Tahoma, Arial, sans-serif;
+    background: #f4f6f8;
+    margin: 0;
+    padding: 20px;
+    direction: rtl;
+  }
+  .container {
+    max-width: 480px;
+    margin: 30px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  h1 {
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 25px;
+    color: #222;
+  }
+  label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #333;
+  }
+  input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+  }
+  button {
+    width: 100%;
+    margin-top: 25px;
+    padding: 12px;
+    background: #2b6cb0;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  button:disabled {
+    background: #999;
+    cursor: not-allowed;
+  }
+  .msg {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 14px;
+  }
+  .msg.success { color: #2f855a; }
+  .msg.error { color: #c53030; }
+  .note {
+    font-size: 12px;
+    color: #777;
+    text-align: center;
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>فرم ثبت اطلاعات</h1>
+  <form id="dataForm">
+    <label for="firstName">نام</label>
+    <input type="text" id="firstName" required>
+
+    <label for="lastName">نام خانوادگی</label>
+    <input type="text" id="lastName" required>
+
+    <label for="nationalId">کد ملی</label>
+    <input type="text" id="nationalId" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required>
+
+    <label for="fatherName">نام پدر</label>
+    <input type="text" id="fatherName" required>
+
+    <label for="birthDate">تاریخ تولد</label>
+    <input type="text" id="birthDate" placeholder="مثال: 1370/05/12" required>
+
+    <label for="address">آدرس</label>
+    <input type="text" id="address" required>
+
+    <button type="submit" id="submitBtn">ثبت اطلاعات</button>
+    <div class="msg" id="msg"></div>
+  </form>
+  <div class="note">اطلاعات شما به‌صورت محرمانه ذخیره می‌شود.</div>
+</div>
+
+<script>
+// آدرس Web App که از Google Apps Script دریافت می‌کنید را اینجا جایگزین کنید
+const SCRIPT_URL = "PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
+
+document.getElementById('dataForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const btn = document.getElementById('submitBtn');
+  const msg = document.getElementById('msg');
+  msg.textContent = '';
+  msg.className = 'msg';
+
+  const data = {
+    firstName: document.getElementById('firstName').value.trim(),
+    lastName: document.getElementById('lastName').value.trim(),
+    nationalId: document.getElementById('nationalId').value.trim(),
+    fatherName: document.getElementById('fatherName').value.trim(),
+    birthDate: document.getElementById('birthDate').value.trim(),
+    address: document.getElementById('address').value.trim()
+  };
+
+  btn.disabled = true;
+  btn.textContent = 'در حال ارسال...';
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(result => {
+    if (result.status === 'success') {
+      msg.textContent = 'اطلاعات با موفقیت ثبت شد.';
+      msg.className = 'msg success';
+      document.getElementById('dataForm').reset();
+    } else {
+      throw new Error(result.message || 'خطای نامشخص');
+    }
+  })
+  .catch(err => {
+    msg.textContent = 'خطا در ثبت اطلاعات. لطفاً دوباره تلاش کنید.';
+    msg.className = 'msg error';
+    console.error(err);
+  })
+  .finally(() => {
+    btn.disabled = false;
+    btn.textContent = 'ثبت اطلاعات';
+  });
+});
+</script>
+
+</body>
+</html>
