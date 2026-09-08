@@ -146,13 +146,14 @@ const FIELDS = [
   { id: 'address',    label: 'آدرس',            type: 'text',    required: true },
   { id: 'nationalCardImage', label: 'تصویر کارت ملی',  type: 'file', required: true },
   { id: 'birthCertImage',    label: 'تصویر شناسنامه',   type: 'file', required: true },
+ { id: 'hokm',    label: 'حکم',   type: 'file', required: true }
 ];
 
 // حداکثر حجم مجاز برای هر فایل آپلودی (بر حسب مگابایت)
 const MAX_FILE_SIZE_MB = 5;
 
 // آدرس Web App که از Google Apps Script دریافت می‌کنید را اینجا جایگزین کنید
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzJm_Eatnx95nxHC3_RF65O8DtBGAzwpQXHBrpufO293HASkLAGEGJX1BHUhNok/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxw1GBxkDHVvC8CDKR0B271whl9qcp9syE1uKPv6HMIhcoj4zzxbR5V1YE72zNgDpM/exec";
 
 // همین مقدار باید دقیقاً در Code.gs هم (متغیر SECRET_TOKEN) قرار داده شود
 const SECRET_TOKEN = "dDmSS7HNjSAMoVmnCF8zlKWvkB6ak3o0";
